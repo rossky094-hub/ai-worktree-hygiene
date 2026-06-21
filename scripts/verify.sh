@@ -86,14 +86,17 @@ done
 
 python3 - <<'PY'
 from pathlib import Path
-from PIL import Image
+import struct
 
 path = Path("assets/social-preview.png")
-with Image.open(path) as image:
-    if image.size != (1280, 640):
-        raise SystemExit(f"FAIL: social preview must be 1280x640, got {image.size}")
-    if image.format != "PNG":
-        raise SystemExit(f"FAIL: social preview must be PNG, got {image.format}")
+data = path.read_bytes()
+if data[:8] != b"\x89PNG\r\n\x1a\n":
+    raise SystemExit("FAIL: social preview must be PNG")
+if data[12:16] != b"IHDR":
+    raise SystemExit("FAIL: social preview PNG is missing IHDR")
+width, height = struct.unpack(">II", data[16:24])
+if (width, height) != (1280, 640):
+    raise SystemExit(f"FAIL: social preview must be 1280x640, got {(width, height)}")
 PY
 
 echo "AI Worktree Hygiene package verification passed."
