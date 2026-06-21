@@ -6,4 +6,4 @@
 - Added AI Worktree Hygiene skill.
 - Added checkpoint and lane-review templates.
 - Added dirty worktree before/after examples.
-- Added package verification script.
+- Added package verification script and GitHub Actions workflow.
