@@ -2,15 +2,19 @@
 
 Your AI agent says "tests pass".
 
-But your branch has research clones, generated files, lockfile drift, and mixed commits.
+But the phase is not clean: tracked changes, ignored runtime residue, scratch
+outputs, subagent diffs, and existing-chain gaps are all mixed into one handoff.
 
-AI Worktree Hygiene gives Codex, Claude Code, Cursor, and other coding agents a stop
-gate before the repo becomes unreviewable.
+AI Worktree Hygiene gives Codex, Claude Code, Cursor, and other coding agents a
+phase-clean checkpoint before the repo becomes unreviewable. It classifies dirty
+worktrees, ignored residue, generated artifacts, delegated changes, and
+existing-chain gaps into reviewable lanes.
 
 ```text
 Before continuing, run an AI Worktree Hygiene checkpoint:
-classify dirty state into lanes, explain what to keep/discard/review,
-and tell me whether this branch is safe to continue, commit, merge, push, or hand off.
+classify tracked, untracked, ignored, scratch, and delegated state into lanes,
+explain what to keep/discard/review, and tell me whether this branch is safe to
+continue, commit, merge, push, or hand off.
 ```
 
 ## 30-Second Before / After
@@ -79,14 +83,16 @@ Result:
 ```text
 Not safe to push yet.
 Safe next action: commit docs/research first, discard raw research cache,
-resolve package-manager drift, then review product-code + tests as one lane.
+resolve package-manager drift, run the existing-chain audit, then review
+product-code + tests as one lane.
 ```
 
 ## Why This Exists
 
 AI coding tools can move faster than the repository can stay understandable.
 A project may have passing tests while still being unsafe to review because source,
-experiments, generated artifacts, dependency changes, and handoff notes are all mixed.
+experiments, generated artifacts, ignored local state, dependency changes,
+delegated work, and handoff notes are all mixed.
 
 This repository gives agents and humans a shared checkpoint:
 
@@ -233,7 +239,7 @@ If a file cannot fit one lane, stop and inspect it before continuing.
 
 | Project | Best For | Boundary |
 | --- | --- | --- |
-| AI Worktree Hygiene | Copyable checkpoint skill for dirty branches, generated artifacts, research caches, dependency drift, and commit lanes | Does not run agents, host dashboards, or monitor repositories continuously |
+| AI Worktree Hygiene | Copyable phase-clean checkpoint for dirty branches, ignored residue, generated artifacts, subagent diffs, existing-chain gaps, dependency drift, and commit lanes | Does not run agents, host dashboards, or monitor repositories continuously |
 | FlowCheck | MCP-style git hygiene monitoring for AI-first development | Heavier runtime surface; use it when you want active monitoring |
 | Vibe Kanban | Agent workspace and task management | Manages work, terminals, and agents; this repo focuses on branch reviewability |
 | Parallel worktree tools | Running multiple agents in isolated git worktrees | Helps create parallel work; this repo helps classify what agents leave behind |
@@ -251,7 +257,8 @@ Settings UI. Use the image in this repo as the upload asset.
 
 AI coding, AI agent workflow, Codex, Claude Code, Cursor, git hygiene, worktree hygiene,
 dirty worktree, repository hygiene, vibe coding, agentic development, subagent workflow,
-commit hygiene, generated artifacts, research cache, MCP workflow.
+commit hygiene, generated artifacts, ignored residue, phase-clean checkpoint,
+existing chain audit, research cache, MCP workflow.
 
 ## Contributing
 

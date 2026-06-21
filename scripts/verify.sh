@@ -46,6 +46,7 @@ require_file docs/install-codex.md
 require_file docs/install-claude-code.md
 require_file docs/install-cursor.md
 require_file docs/releases/v0.1.0.md
+require_file docs/releases/v0.2.0.md
 require_file examples/30-second-demo.md
 require_file assets/social-preview.png
 require_file scripts/make-social-preview.py
@@ -75,6 +76,7 @@ require_grep 'scan, dashboard, export, or verification command' skills/ai-worktr
 require_grep 'Do not continue with product work until the hygiene checkpoint is written' skills/ai-worktree-hygiene/SKILL.md
 
 require_grep 'AI coding' README.md
+require_grep 'phase-clean checkpoint' README.md
 require_grep 'git hygiene' README.md
 require_grep 'worktree hygiene' README.md
 require_grep 'dirty worktree' README.md
@@ -99,6 +101,9 @@ require_grep 'MIT' README.md
 require_grep 'Show HN' docs/launch-posts.md
 require_grep 'assets/social-preview.png' docs/social-preview.md
 require_grep 'First Public Checkpoint Skill' docs/releases/v0.1.0.md
+require_grep 'Phase-Clean and Delegation Gates' docs/releases/v0.2.0.md
+require_grep 'subagent diffs, and existing-chain gaps' docs/github-discoverability.md
+require_grep 'subagent diffs, and existing-chain gaps' docs/launch-playbook.md
 require_grep '^worktree-hygiene$' repository-topics.txt
 require_grep '^dirty-worktree$' repository-topics.txt
 require_grep '^commit-hygiene$' repository-topics.txt
