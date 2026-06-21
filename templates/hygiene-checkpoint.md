@@ -9,6 +9,11 @@
 - Current branch dirty:
 - Untracked files:
 - Ignored generated outputs:
+- Large generated/runtime directories:
+- Generated/runtime readiness trap:
+  - Workflow graph or dashboard runtime exists:
+  - Contracts/verifications/mismatches/repairs/ledger exist:
+  - Claim readiness conclusion:
 - Raw research caches:
 - Package-manager drift:
 
@@ -20,6 +25,7 @@
 | `git diff --stat` |  |  |
 | `git ls-files --others --exclude-standard` |  |  |
 | `git ls-files --others --ignored --exclude-standard` |  |  |
+| `du -sh .starter-os .venv db data reports dist coverage build .research 2>/dev/null || true` |  |  |
 
 ## Lane Summary
 
@@ -42,6 +48,8 @@
 - Which lane mixed with another lane?
 - Which files need slicing before commit?
 - Which generated outputs should stay ignored or be cleaned?
+- Did a generated graph, dashboard, or report bundle get mistaken for contract, repair, or claim readiness?
+- Did any scan, dashboard, export, or verification command write artifacts without a declared output lane?
 
 ## Recommended Action
 

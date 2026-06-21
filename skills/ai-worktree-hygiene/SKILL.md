@@ -28,8 +28,11 @@ Run the full process immediately when any of these is true:
 
 - git status --short is non-empty.
 - ignored generated outputs such as dist/, coverage/, build/, or .starter-os/ exist after verification or export commands.
+- large repo-local generated or runtime directories such as `.starter-os/`, `.venv/`, `db/`, `data/`, or `reports/` appear untracked, ignored, or unexplained.
+- a workflow graph or dashboard runtime exists but contract, verification, mismatch, repair, or ledger artifacts are missing.
 - `.research/`, cloned external repositories, downloaded datasets, or other raw research caches appear in the repo tree.
 - `pnpm-lock.yaml`, `yarn.lock`, `pnpm-workspace.yaml`, or another package-manager artifact appears without an approved package-manager migration.
+- A scan, dashboard, export, or verification command has run without a declared output lane and cleanup/keep decision.
 - An AI coding phase, lane, work order, or subagent batch has finished and its changes have not been classified.
 - One shared file, such as `types.ts`, `store.ts`, `cli.ts`, or `tools.ts`, mixes multiple version phases or product layers.
 - Preparing to commit, merge, push, publish, hand off, or start a new version from the current branch.
@@ -39,6 +42,7 @@ Run the full process immediately when any of these is true:
 Run at least the lightweight status and ignored-output checks when any of these is true. Escalate to the full process if anything is dirty or unexplained:
 
 - Moving from research to spec, spec to plan, plan to implementation, implementation to review, or one lane to another.
+- Before running any scan, dashboard, export, or verification command that may materialize project-local artifacts.
 - Finishing a verification command that may write generated files.
 - Returning to a branch after context compaction, a long pause, or another thread/subagent changed related files.
 - Feeling tempted to say "tests pass" before the branch is reviewable.
@@ -60,7 +64,7 @@ Run at least the lightweight status and ignored-output checks when any of these 
    git diff --stat
    git ls-files --others --exclude-standard
    git ls-files --others --ignored --exclude-standard | sed -n '1,120p'
-   du -sh .research docs/research docs/specs docs/plans src tests adapters 2>/dev/null || true
+   du -sh .starter-os .venv db data reports dist coverage build .research docs/research docs/specs docs/plans src tests adapters 2>/dev/null || true
    ```
 
 3. Check stop gates before continuing:
@@ -69,6 +73,8 @@ Run at least the lightweight status and ignored-output checks when any of these 
    - `.research/` or another raw cache appears in untracked files.
    - Ignored generated outputs appear after verification and are not recorded as local residue or cleaned with user-approved intent.
    - Package-manager artifacts appear without approved migration.
+   - Large generated/runtime directories are present and lack a keep/discard/ignore decision.
+   - A generated workflow graph or dashboard runtime is present, but contract, verification, mismatch, repair, or ledger artifacts needed for the product claim are missing.
    - A new phase has started while the previous phase lacks a closure record.
    - Subagent work returned without an integration checkpoint.
    - Tests pass but the dirty state cannot be explained in one paragraph.
@@ -90,7 +96,11 @@ Run at least the lightweight status and ignored-output checks when any of these 
 
 6. Keep the package-manager boundary explicit. If the repo commits one lockfile format, treat a different lockfile format as a discard candidate unless the user approves a migration.
 
-7. Verify behavior before recommending commit or discard:
+7. Treat scan, dashboard, export, and verification commands as write-risky unless proven read-only. Before running one, name its expected output lane. After running one, classify every generated path.
+
+8. Separate runtime readiness from product readiness. A generated graph, dashboard, report bundle, or chunk index only proves that an artifact exists. It does not prove that expected contracts, mismatch attribution, repair paths, work orders, or claim transitions are complete.
+
+9. Verify behavior before recommending commit or discard:
 
    ```bash
    npm test 2>/dev/null || true
@@ -99,25 +109,28 @@ Run at least the lightweight status and ignored-output checks when any of these 
 
    Replace these with the project's real verification commands.
 
-8. Verify explainability separately from behavior:
+10. Verify explainability separately from behavior:
 
    - Can the dirty state be summarized by lane?
    - Can each lane name its owner phase?
    - Can each lane name its verification evidence?
    - Can each lane say keep, discard, commit, or review?
    - Can the next action be done without touching unrelated lanes?
+   - If generated runtime artifacts exist, can you say which product-chain artifacts are still missing?
 
-9. Produce a checkpoint report with:
+11. Produce a checkpoint report with:
 
    - clean/dirty state of main and current worktree,
    - ignored generated output status,
+   - large generated/runtime directory status,
+   - graph/runtime readiness versus contract/repair/ledger readiness,
    - verification commands and results,
    - keep/commit/discard recommendations,
    - lane dependency notes,
    - root-cause notes,
    - next action.
 
-10. Do not delete, revert, or commit user-created files unless the user explicitly approves the proposed action.
+12. Do not delete, revert, or commit user-created files unless the user explicitly approves the proposed action.
 
 ## Commit Lanes
 
@@ -147,6 +160,8 @@ When the worktree gets hard to read, look for these causes and record which ones
 8. UI, core, docs, adapters, and dependencies all advanced in one branch.
 9. Generated runtime artifacts mixed with authored source.
 10. No checkpoint before moving to the next spec or implementation phase.
+11. Runtime graph or dashboard success mistaken for contract, repair, or claim readiness.
+12. Environment, database, report, and dashboard outputs kept inside the repo without an explicit local-artifact policy.
 
 For each cause, write one prevention action into the checkpoint report.
 
