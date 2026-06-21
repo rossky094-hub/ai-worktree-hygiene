@@ -14,6 +14,10 @@
   - Workflow graph or dashboard runtime exists:
   - Contracts/verifications/mismatches/repairs/ledger exist:
   - Claim readiness conclusion:
+- Case sentinel boundary:
+  - Dogfood/case artifacts read:
+  - Sentinel terms found in product source/default UI/core schema:
+  - Allowed only in case-study docs, fixtures, generated evidence, or boundary tests:
 - Raw research caches:
 - Package-manager drift:
 
@@ -50,6 +54,7 @@
 - Which generated outputs should stay ignored or be cleaned?
 - Did a generated graph, dashboard, or report bundle get mistaken for contract, repair, or claim readiness?
 - Did any scan, dashboard, export, or verification command write artifacts without a declared output lane?
+- Did dogfood/case labels get promoted into product source, default UI copy, core schema, or generic docs?
 
 ## Recommended Action
 

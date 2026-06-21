@@ -147,6 +147,7 @@ Check:
 - ignored generated outputs
 - large repo-local runtime directories such as .starter-os/, .venv/, db/, data/, or reports/
 - whether a workflow graph exists but contracts or repair artifacts are missing
+- whether a dogfood or case adapter reads case artifacts while case sentinel terms stay out of product source
 - research caches
 - package-manager drift
 - mixed product/test/docs/dependency changes
@@ -179,6 +180,7 @@ Run the full hygiene checkpoint immediately when:
 - ignored generated outputs such as `dist/`, `coverage/`, `build/`, or `.starter-os/` exist after verification commands
 - large repo-local runtime directories such as `.starter-os/`, `.venv/`, `db/`, `data/`, or `reports/` are untracked, ignored, or unexplained
 - a workflow graph exists but contracts or repair artifacts are missing, creating a graph-ready but not claim-ready state
+- a dogfood or case adapter reads case artifacts while case sentinel terms appear in product source, default UI copy, core schemas, or generic docs; this is a case sentinel boundary failure
 - `.research/`, cloned external repositories, downloaded datasets, or raw research caches appear in the repo tree
 - package-manager files appear without an approved migration
 - a scan, dashboard, export, or verification command ran without an output lane and cleanup/keep decision

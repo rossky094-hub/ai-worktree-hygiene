@@ -1,6 +1,6 @@
 ---
 name: ai-worktree-hygiene
-description: Use when git status is dirty, ignored generated outputs appear, research caches or package-manager files appear, an AI coding phase/lane/subagent batch finishes, before switching lanes or versions, before committing/merging/pushing, or whenever a worktree cannot be explained by lane, phase, evidence, and next action.
+description: Use when git status is dirty, ignored generated outputs appear, research caches or package-manager files appear, dogfood/case sentinel terms leak into product source, an AI coding phase/lane/subagent batch finishes, before switching lanes or versions, before committing/merging/pushing, or whenever a worktree cannot be explained by lane, phase, evidence, and next action.
 ---
 
 # AI Worktree Hygiene
@@ -30,6 +30,7 @@ Run the full process immediately when any of these is true:
 - ignored generated outputs such as dist/, coverage/, build/, or .starter-os/ exist after verification or export commands.
 - large repo-local generated or runtime directories such as `.starter-os/`, `.venv/`, `db/`, `data/`, or `reports/` appear untracked, ignored, or unexplained.
 - a workflow graph or dashboard runtime exists but contract, verification, mismatch, repair, or ledger artifacts are missing.
+- a dogfood/case adapter or pilot-report reader is added and case sentinel terms appear in product source, default UI copy, core schemas, or generic docs outside case-study artifacts, fixtures, or boundary tests.
 - `.research/`, cloned external repositories, downloaded datasets, or other raw research caches appear in the repo tree.
 - `pnpm-lock.yaml`, `yarn.lock`, `pnpm-workspace.yaml`, or another package-manager artifact appears without an approved package-manager migration.
 - A scan, dashboard, export, or verification command has run without a declared output lane and cleanup/keep decision.
@@ -42,6 +43,7 @@ Run the full process immediately when any of these is true:
 Run at least the lightweight status and ignored-output checks when any of these is true. Escalate to the full process if anything is dirty or unexplained:
 
 - Moving from research to spec, spec to plan, plan to implementation, implementation to review, or one lane to another.
+- Before promoting dogfood/case report handling into generic core, dashboard, adapters, or docs.
 - Before running any scan, dashboard, export, or verification command that may materialize project-local artifacts.
 - Finishing a verification command that may write generated files.
 - Returning to a branch after context compaction, a long pause, or another thread/subagent changed related files.
@@ -75,6 +77,7 @@ Run at least the lightweight status and ignored-output checks when any of these 
    - Package-manager artifacts appear without approved migration.
    - Large generated/runtime directories are present and lack a keep/discard/ignore decision.
    - A generated workflow graph or dashboard runtime is present, but contract, verification, mismatch, repair, or ledger artifacts needed for the product claim are missing.
+   - Case sentinel terms appear in product source, default UI copy, core schemas, or generic docs instead of staying in case-study artifacts, fixtures, generated/extracted evidence, or boundary tests.
    - A new phase has started while the previous phase lacks a closure record.
    - Subagent work returned without an integration checkpoint.
    - Tests pass but the dirty state cannot be explained in one paragraph.
@@ -100,7 +103,9 @@ Run at least the lightweight status and ignored-output checks when any of these 
 
 8. Separate runtime readiness from product readiness. A generated graph, dashboard, report bundle, or chunk index only proves that an artifact exists. It does not prove that expected contracts, mismatch attribution, repair paths, work orders, or claim transitions are complete.
 
-9. Verify behavior before recommending commit or discard:
+9. Separate case evidence from product semantics. A case adapter may read case artifacts and pass extracted labels through evidence/report fields. Product source, default UI copy, core schemas, and generic docs must not hardcode case sentinel terms; allow them only in case-study docs, fixtures, generated/extracted evidence, and explicit boundary tests.
+
+10. Verify behavior before recommending commit or discard:
 
    ```bash
    npm test 2>/dev/null || true
@@ -109,7 +114,7 @@ Run at least the lightweight status and ignored-output checks when any of these 
 
    Replace these with the project's real verification commands.
 
-10. Verify explainability separately from behavior:
+11. Verify explainability separately from behavior:
 
    - Can the dirty state be summarized by lane?
    - Can each lane name its owner phase?
@@ -117,20 +122,22 @@ Run at least the lightweight status and ignored-output checks when any of these 
    - Can each lane say keep, discard, commit, or review?
    - Can the next action be done without touching unrelated lanes?
    - If generated runtime artifacts exist, can you say which product-chain artifacts are still missing?
+   - If dogfood/case artifacts exist, can you list the case sentinel terms and prove they stay out of product source, default UI copy, and core schemas?
 
-11. Produce a checkpoint report with:
+12. Produce a checkpoint report with:
 
    - clean/dirty state of main and current worktree,
    - ignored generated output status,
    - large generated/runtime directory status,
    - graph/runtime readiness versus contract/repair/ledger readiness,
+   - case sentinel boundary status,
    - verification commands and results,
    - keep/commit/discard recommendations,
    - lane dependency notes,
    - root-cause notes,
    - next action.
 
-12. Do not delete, revert, or commit user-created files unless the user explicitly approves the proposed action.
+13. Do not delete, revert, or commit user-created files unless the user explicitly approves the proposed action.
 
 ## Commit Lanes
 
@@ -162,6 +169,7 @@ When the worktree gets hard to read, look for these causes and record which ones
 10. No checkpoint before moving to the next spec or implementation phase.
 11. Runtime graph or dashboard success mistaken for contract, repair, or claim readiness.
 12. Environment, database, report, and dashboard outputs kept inside the repo without an explicit local-artifact policy.
+13. Case-specific labels from dogfood or pilot reports promoted into product schema, default UI copy, or generic docs instead of staying extracted evidence.
 
 For each cause, write one prevention action into the checkpoint report.
 
