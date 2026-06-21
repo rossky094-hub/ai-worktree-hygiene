@@ -17,6 +17,16 @@
   - Input source:
   - Private reports or case artifacts read:
   - Destroy / keep decision:
+- Existing chain audit:
+  - Required:
+  - Completed:
+  - Existing chain extended / bypassed:
+  - Bypass justification:
+- Subagent diff whitelist review:
+  - Subagent or worker returned changes:
+  - Expected lane and file set:
+  - Unexpected paths:
+  - while-here enhancement isolated:
 - Generated/runtime readiness trap:
   - Workflow graph or dashboard runtime exists:
   - Contracts/verifications/mismatches/repairs/ledger exist:
@@ -36,6 +46,7 @@
 | `git status --short` |  |  |
 | `git status --ignored --short` |  |  |
 | `git diff --stat` |  |  |
+| `git diff --name-only` |  |  |
 | `git ls-files --others --exclude-standard` |  |  |
 | `git ls-files --others --ignored --exclude-standard` |  |  |
 | `du -sh .starter-os .local .venv node_modules db data reports dist coverage build .research 2>/dev/null || true` |  |  |
@@ -61,6 +72,9 @@
 - What made the branch hard to review?
 - Which stop gate should have fired earlier?
 - Did tracked clean get mistaken for phase clean?
+- Did a new product slice bypass existing specs, dogfood runs, case studies, or generated project artifacts without an Existing Chain Audit?
+- Did subagent work get accepted before diff whitelist review?
+- Did a while-here enhancement or cross-lane cleanup sneak into the current slice?
 - Which lane mixed with another lane?
 - Which files need slicing before commit?
 - Which generated outputs should stay ignored or be cleaned?

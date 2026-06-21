@@ -67,6 +67,10 @@ require_grep 'camelCase case sentinel keys' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'case adapter may read case artifacts' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'scratch-outside-repo' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'local-runtime' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'Existing Chain Audit' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'No table, no implementation' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'diff whitelist review' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'while-here enhancement' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'scan, dashboard, export, or verification command' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'Do not continue with product work until the hygiene checkpoint is written' skills/ai-worktree-hygiene/SKILL.md
 
@@ -84,6 +88,9 @@ require_grep 'One-Click Prompt' README.md
 require_grep 'Comparison' README.md
 require_grep 'git status --ignored --short' README.md
 require_grep 'tracked clean is not phase clean' README.md
+require_grep 'Existing Chain Audit' README.md
+require_grep 'diff whitelist review' README.md
+require_grep 'while-here enhancement' README.md
 require_grep 'workflow graph exists but contracts or repair artifacts are missing' README.md
 require_grep 'dogfood or case adapter reads case artifacts' README.md
 require_grep 'case sentinel boundary' README.md
@@ -100,9 +107,11 @@ require_grep 'Generated/runtime readiness trap' templates/hygiene-checkpoint.md
 require_grep 'Case sentinel boundary' templates/hygiene-checkpoint.md
 require_grep 'Ignored local-runtime residue' templates/hygiene-checkpoint.md
 require_grep 'Scratch outside repo outputs' templates/hygiene-checkpoint.md
+require_grep 'Existing chain audit' templates/hygiene-checkpoint.md
+require_grep 'Subagent diff whitelist review' templates/hygiene-checkpoint.md
 
 for file in README.md skills/ai-worktree-hygiene/SKILL.md templates/*.md examples/*.md docs/*.md; do
-  reject_grep "$(printf '%s|%s|%s|%s|%s' "Eche""lon" "Continuous ""Project OS" "/Users/""r" "New ""project" "V""3\\.[0-9]")" "$file"
+  reject_grep "$(printf '%s|%s|%s|%s|%s|%s' "Eche""lon" "Continuous ""Project OS" "Project ""OS" "/Users/""r" "New ""project" "V""3\\.[0-9]")" "$file"
   reject_grep "$(printf '%s|%s' "claim""Card""Proof""Ledger" "evidence""Scoped""Beta""Top10")" "$file"
 done
 

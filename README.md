@@ -152,8 +152,11 @@ Check:
 - ignored generated outputs
 - large repo-local runtime directories such as .starter-os/, .local/, .venv/, node_modules/, db/, data/, reports/, or dist/
 - whether a workflow graph exists but contracts or repair artifacts are missing
+- whether a repo with prior versioned specs, dogfood runs, case studies, or generated project artifacts needs an Existing Chain Audit before a new slice
 - whether a dogfood or case adapter reads case artifacts while case sentinel terms stay out of product source
 - whether case sentinel checks include camelCase/key variants, not only visible labels
+- whether returned subagent work passed diff whitelist review against the requested lane and file set
+- whether any while-here enhancement or cross-lane cleanup must be isolated into a separate slice
 - scratch path outputs outside the repo, including input source, private-data status, and cleanup decision
 - research caches
 - package-manager drift
@@ -168,6 +171,9 @@ For each lane, say keep, discard, commit, review, or split.
 Remember: tracked clean is not phase clean. Do not claim the branch is ready unless
 tracked, untracked, ignored, and outside-repo scratch state can be explained by
 lane, phase, evidence, and next action.
+
+For multi-version or dogfood-heavy repos: No Existing Chain Audit table, no implementation.
+For delegated work: No diff whitelist review, no acceptance.
 ```
 
 ## What It Includes
@@ -190,12 +196,15 @@ Run the full hygiene checkpoint immediately when:
 - ignored generated outputs such as `dist/`, `coverage/`, `build/`, or `.starter-os/` exist after verification commands
 - large repo-local runtime directories such as `.starter-os/`, `.local/`, `.venv/`, `node_modules/`, `db/`, `data/`, `reports/`, or `dist/` are untracked, ignored, or unexplained
 - a workflow graph exists but contracts or repair artifacts are missing, creating a graph-ready but not claim-ready state
+- a repo already has versioned specs, dogfood runs, case studies, or generated project artifacts, and a new spec, adapter, fixture, dashboard slice, compatibility harness, projection, or repair graph is proposed without an Existing Chain Audit
 - a dogfood or case adapter reads case artifacts while case sentinel terms appear in product source, default UI copy, core schemas, or generic docs; this is a case sentinel boundary failure
 - a dogfood or case adapter only checks visible labels while camelCase/key variants, report filenames, or legacy case identifiers can still leak into product code
 - `.research/`, cloned external repositories, downloaded datasets, or raw research caches appear in the repo tree
 - package-manager files appear without an approved migration
 - a scan, dashboard, export, verification, build, or dry-run command ran without an output lane and cleanup/keep decision
 - a dry-run writes to a `/tmp` or outside-repo scratch path without recording the scratch path, input source, private-data status, and destroy/keep decision
+- subagent work returns without a diff whitelist review against the approved lane and expected file set
+- a worker introduces a cross-lane while-here enhancement that was not in the approved work order
 - a phase, lane, or subagent batch has finished and has not been classified
 - a shared file mixes multiple product layers or version phases
 - you are preparing to commit, merge, push, publish, hand off, or start a new version
