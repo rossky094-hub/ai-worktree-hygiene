@@ -1,0 +1,9 @@
+# Changelog
+
+## 0.1.0
+
+- Initial public package.
+- Added AI Worktree Hygiene skill.
+- Added checkpoint and lane-review templates.
+- Added dirty worktree before/after examples.
+- Added package verification script.

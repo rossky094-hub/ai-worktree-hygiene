@@ -1,0 +1,178 @@
+---
+name: ai-worktree-hygiene
+description: Use when git status is dirty, ignored generated outputs appear, research caches or package-manager files appear, an AI coding phase/lane/subagent batch finishes, before switching lanes or versions, before committing/merging/pushing, or whenever a worktree cannot be explained by lane, phase, evidence, and next action.
+---
+
+# AI Worktree Hygiene
+
+Keep an AI-assisted coding worktree reviewable before doing more product work.
+This skill is a stop gate, not a cleanup afterthought.
+
+Core rule:
+
+```text
+Do not start the next product phase when the current worktree cannot be explained by lane, phase, evidence, and next action.
+```
+
+## Trigger Decision
+
+Treat this skill as a gate, not a reminder. If a hard trigger matches, stop product work and write the hygiene checkpoint first.
+
+```text
+Do not continue with product work until the hygiene checkpoint is written.
+```
+
+### Hard Triggers
+
+Run the full process immediately when any of these is true:
+
+- git status --short is non-empty.
+- ignored generated outputs such as dist/, coverage/, build/, or .starter-os/ exist after verification or export commands.
+- `.research/`, cloned external repositories, downloaded datasets, or other raw research caches appear in the repo tree.
+- `pnpm-lock.yaml`, `yarn.lock`, `pnpm-workspace.yaml`, or another package-manager artifact appears without an approved package-manager migration.
+- An AI coding phase, lane, work order, or subagent batch has finished and its changes have not been classified.
+- One shared file, such as `types.ts`, `store.ts`, `cli.ts`, or `tools.ts`, mixes multiple version phases or product layers.
+- Preparing to commit, merge, push, publish, hand off, or start a new version from the current branch.
+
+### Soft Triggers
+
+Run at least the lightweight status and ignored-output checks when any of these is true. Escalate to the full process if anything is dirty or unexplained:
+
+- Moving from research to spec, spec to plan, plan to implementation, implementation to review, or one lane to another.
+- Finishing a verification command that may write generated files.
+- Returning to a branch after context compaction, a long pause, or another thread/subagent changed related files.
+- Feeling tempted to say "tests pass" before the branch is reviewable.
+- A user asks whether the project is dirty, clean, ready, reviewable, or safe to open source.
+
+## Process
+
+1. Confirm whether the active checkout is main or an isolated worktree:
+
+   ```bash
+   git worktree list
+   git branch --show-current
+   git status --short
+   ```
+
+2. Measure the dirty state:
+
+   ```bash
+   git diff --stat
+   git ls-files --others --exclude-standard
+   git ls-files --others --ignored --exclude-standard | sed -n '1,120p'
+   du -sh .research docs/research docs/specs docs/plans src tests adapters 2>/dev/null || true
+   ```
+
+3. Check stop gates before continuing:
+
+   - Main is dirty and the task did not explicitly target main cleanup.
+   - `.research/` or another raw cache appears in untracked files.
+   - Ignored generated outputs appear after verification and are not recorded as local residue or cleaned with user-approved intent.
+   - Package-manager artifacts appear without approved migration.
+   - A new phase has started while the previous phase lacks a closure record.
+   - Subagent work returned without an integration checkpoint.
+   - Tests pass but the dirty state cannot be explained in one paragraph.
+   - One shared file mixes multiple product layers without a slicing plan.
+
+4. Classify every path into one lane:
+
+   - `product-code`
+   - `tests`
+   - `spec-plan`
+   - `research-summary`
+   - `research-cache`
+   - `generated-runtime`
+   - `dependency`
+   - `accidental-tooling`
+   - `unknown`
+
+5. Keep raw external repository clones out of product commits. A research cache is local source material, not product source.
+
+6. Keep the package-manager boundary explicit. If the repo commits one lockfile format, treat a different lockfile format as a discard candidate unless the user approves a migration.
+
+7. Verify behavior before recommending commit or discard:
+
+   ```bash
+   npm test 2>/dev/null || true
+   npm run build 2>/dev/null || true
+   ```
+
+   Replace these with the project's real verification commands.
+
+8. Verify explainability separately from behavior:
+
+   - Can the dirty state be summarized by lane?
+   - Can each lane name its owner phase?
+   - Can each lane name its verification evidence?
+   - Can each lane say keep, discard, commit, or review?
+   - Can the next action be done without touching unrelated lanes?
+
+9. Produce a checkpoint report with:
+
+   - clean/dirty state of main and current worktree,
+   - ignored generated output status,
+   - verification commands and results,
+   - keep/commit/discard recommendations,
+   - lane dependency notes,
+   - root-cause notes,
+   - next action.
+
+10. Do not delete, revert, or commit user-created files unless the user explicitly approves the proposed action.
+
+## Commit Lanes
+
+Prefer separate commits for:
+
+1. `docs/research`
+2. `docs/spec-plan`
+3. `product-code`
+4. `tests`
+5. `deps`
+6. `adapters`
+7. `hygiene`
+
+If a file cannot fit one lane, stop and inspect it before continuing.
+
+## Root Causes To Check
+
+When the worktree gets hard to read, look for these causes and record which ones apply:
+
+1. Research cache stored like product source.
+2. Version labels used for thinking but not closure gates.
+3. Subagent execution completed without integration ownership.
+4. Passing tests mistaken for repository readiness.
+5. Product direction changed while old phase remained unclosed.
+6. Package-manager boundary drift.
+7. Large shared files hiding multiple product phases.
+8. UI, core, docs, adapters, and dependencies all advanced in one branch.
+9. Generated runtime artifacts mixed with authored source.
+10. No checkpoint before moving to the next spec or implementation phase.
+
+For each cause, write one prevention action into the checkpoint report.
+
+## Required Lane Review Output
+
+A useful report must include:
+
+- lane name,
+- file list or file pattern,
+- keep/discard/commit/review decision,
+- dependency on other lanes,
+- risk,
+- suggested commit message,
+- whether it can be cherry-picked independently,
+- whether it blocks the next product phase.
+
+## Lane Retrospective Prompts
+
+For every lane you touch, answer these before staging:
+
+```text
+Why did this lane appear?
+Why did it get mixed with other lanes?
+What would have prevented the mix?
+What evidence proves this lane is safe to keep?
+What should trigger this skill earlier next time?
+```
+
+If the answer reveals a new prevention rule, update this skill or the process doc before committing the lane.

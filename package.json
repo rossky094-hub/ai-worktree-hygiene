@@ -1,0 +1,23 @@
+{
+  "name": "ai-worktree-hygiene",
+  "version": "0.1.0",
+  "private": false,
+  "description": "A checkpoint skill for AI coding agents to keep dirty worktrees, generated artifacts, research caches, dependency drift, and commit lanes reviewable.",
+  "scripts": {
+    "test": "bash scripts/verify.sh"
+  },
+  "keywords": [
+    "ai-coding",
+    "ai-agents",
+    "git-hygiene",
+    "worktree-hygiene",
+    "dirty-worktree",
+    "repository-hygiene",
+    "commit-hygiene",
+    "vibe-coding",
+    "codex",
+    "claude-code",
+    "cursor"
+  ],
+  "license": "MIT"
+}
