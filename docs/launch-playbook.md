@@ -46,6 +46,7 @@ Do:
 - Open starter issues labeled `good first issue`.
 - Comment on adjacent discussions only when genuinely useful.
 - Share a before/after branch hygiene example, not a vague announcement.
+- Upload `assets/social-preview.png` in GitHub Settings > Social preview.
 - Keep commits small and readable so contributors trust the project.
 
 Do not:

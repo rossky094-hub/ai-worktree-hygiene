@@ -1,20 +1,82 @@
 # AI Worktree Hygiene
 
-AI Worktree Hygiene is a lightweight checkpoint skill for AI-assisted coding projects.
-It helps Codex, Claude Code, Cursor, and other coding agents stop before a repository
-becomes impossible to review.
+Your AI agent says "tests pass".
 
-Use it when tests pass but the project still feels messy:
+But your branch has research clones, generated files, lockfile drift, and mixed commits.
 
-- dirty git status
-- ignored `dist/`, `coverage/`, or generated runtime output
-- cloned research repositories mixed with product code
-- accidental package-manager drift such as `pnpm-lock.yaml` in an npm project
-- multiple AI agent or subagent batches writing into the same branch
-- large commits that mix product code, tests, docs, research, dependencies, and generated files
+AI Worktree Hygiene gives Codex, Claude Code, Cursor, and other coding agents a stop
+gate before the repo becomes unreviewable.
 
-The goal is simple: before continuing, committing, merging, pushing, or handing off,
-classify the worktree into lanes and produce an explainable action plan.
+```text
+Before continuing, run an AI Worktree Hygiene checkpoint:
+classify dirty state into lanes, explain what to keep/discard/review,
+and tell me whether this branch is safe to continue, commit, merge, push, or hand off.
+```
+
+## 30-Second Before / After
+
+### Before
+
+Tests pass, but the worktree is not reviewable:
+
+```text
+$ git status --short
+ M package.json
+ M package-lock.json
+ M src/dashboard/App.tsx
+ M src/core/store.ts
+ M tests/dashboard/App.test.tsx
+ M docs/specs/dashboard-contracts.md
+?? .research/flowcheck/
+?? .research/worktree-tools/
+?? docs/research/git-hygiene.md
+?? pnpm-lock.yaml
+
+$ git ls-files --others --ignored --exclude-standard | sed -n '1,8p'
+dist/
+coverage/
+node_modules/
+```
+
+### Run
+
+```text
+Use ai-worktree-hygiene to check whether this branch is safe to continue, commit, or hand off.
+```
+
+### After
+
+```text
+Lane: docs/research
+Decision: commit separately
+Evidence: distilled summary only
+
+Lane: research-cache
+Paths: .research/flowcheck/, .research/worktree-tools/
+Decision: discard or keep ignored
+Risk: raw external repos must not enter product commits
+
+Lane: dependency
+Paths: package.json, package-lock.json, pnpm-lock.yaml
+Decision: review
+Risk: package-manager drift; delete pnpm-lock.yaml unless migration is approved
+
+Lane: product-code
+Paths: src/dashboard/App.tsx, src/core/store.ts
+Decision: review and split if core/store mixes unrelated runtime changes
+
+Lane: generated-runtime
+Paths: dist/, coverage/
+Decision: clean or record as local residue before handoff
+```
+
+Result:
+
+```text
+Not safe to push yet.
+Safe next action: commit docs/research first, discard raw research cache,
+resolve package-manager drift, then review product-code + tests as one lane.
+```
 
 ## Why This Exists
 
@@ -22,7 +84,7 @@ AI coding tools can move faster than the repository can stay understandable.
 A project may have passing tests while still being unsafe to review because source,
 experiments, generated artifacts, dependency changes, and handoff notes are all mixed.
 
-This repository gives agents and humans a shared stop gate:
+This repository gives agents and humans a shared checkpoint:
 
 ```text
 actual worktree state
@@ -34,43 +96,78 @@ actual worktree state
 -> commit or discard decision
 ```
 
-## What It Is
-
-This is not a git worktree manager and not a replacement for your coding agent.
-It is a hygiene checkpoint that fits inside an existing AI coding workflow.
-
-It includes:
-
-- `skills/ai-worktree-hygiene/SKILL.md` - the reusable agent skill
-- `templates/hygiene-checkpoint.md` - a report template for dirty state review
-- `templates/lane-review.md` - a lane-by-lane commit/discard template
-- `examples/dirty-worktree-before.md` - a realistic messy state
-- `examples/hygiene-checkpoint-after.md` - the expected cleaned-up analysis
-- `scripts/verify.sh` - package checks for triggers, templates, and private-context leaks
-
 ## Quick Start
 
-Copy the skill into your agent's skill directory or reference it from your project docs.
-
-For Codex or Claude-style skill folders:
+### Codex
 
 ```bash
 mkdir -p ~/.codex/skills/ai-worktree-hygiene
 cp skills/ai-worktree-hygiene/SKILL.md ~/.codex/skills/ai-worktree-hygiene/SKILL.md
 ```
 
-For project-local use:
-
-```bash
-cp skills/ai-worktree-hygiene/SKILL.md ./.ai-worktree-hygiene.md
-cp templates/hygiene-checkpoint.md ./hygiene-checkpoint.md
-```
-
-Then ask your agent:
+Then ask Codex:
 
 ```text
-Use ai-worktree-hygiene to check whether this branch is safe to continue, commit, or hand off.
+Use ai-worktree-hygiene before continuing on this branch.
 ```
+
+More detail: `docs/install-codex.md`.
+
+### Claude Code
+
+Copy or reference the skill in your Claude Code project instructions, then ask:
+
+```text
+Use the AI Worktree Hygiene skill to review this dirty branch before any commit or handoff.
+```
+
+More detail: `docs/install-claude-code.md`.
+
+### Cursor
+
+Paste the compact project rule from `docs/install-cursor.md` into Cursor project rules.
+
+Then ask:
+
+```text
+Run the worktree hygiene checkpoint and tell me which lanes are safe to commit.
+```
+
+### One-Click Prompt
+
+Copy this into any coding agent:
+
+```text
+Before continuing, run an AI Worktree Hygiene checkpoint.
+
+Check:
+- git status --short
+- git diff --stat
+- untracked files
+- ignored generated outputs
+- research caches
+- package-manager drift
+- mixed product/test/docs/dependency changes
+
+Classify every path into one lane:
+product-code, tests, spec-plan, research-summary, research-cache,
+generated-runtime, dependency, accidental-tooling, or unknown.
+
+For each lane, say keep, discard, commit, review, or split.
+Do not claim the branch is ready unless the dirty state can be explained by lane,
+phase, evidence, and next action.
+```
+
+## What It Includes
+
+- `skills/ai-worktree-hygiene/SKILL.md` - the reusable agent skill
+- `templates/hygiene-checkpoint.md` - a report template for dirty state review
+- `templates/lane-review.md` - a lane-by-lane commit/discard template
+- `examples/dirty-worktree-before.md` - a realistic messy state
+- `examples/hygiene-checkpoint-after.md` - the expected cleaned-up analysis
+- `examples/30-second-demo.md` - the short before/after demo
+- `assets/social-preview.png` - a 1280x640 share image
+- `scripts/verify.sh` - package checks for triggers, templates, assets, and private-context leaks
 
 ## Hard Triggers
 
@@ -102,28 +199,23 @@ Classify every changed path into exactly one lane:
 
 If a file cannot fit one lane, stop and inspect it before continuing.
 
-## Example Commands
+## Comparison
 
-```bash
-git worktree list
-git branch --show-current
-git status --short
-git diff --stat
-git ls-files --others --exclude-standard
-git ls-files --others --ignored --exclude-standard | sed -n '1,120p'
-```
+| Project | Best For | Boundary |
+| --- | --- | --- |
+| AI Worktree Hygiene | Copyable checkpoint skill for dirty branches, generated artifacts, research caches, dependency drift, and commit lanes | Does not run agents, host dashboards, or monitor repositories continuously |
+| FlowCheck | MCP-style git hygiene monitoring for AI-first development | Heavier runtime surface; use it when you want active monitoring |
+| Vibe Kanban | Agent workspace and task management | Manages work, terminals, and agents; this repo focuses on branch reviewability |
+| Parallel worktree tools | Running multiple agents in isolated git worktrees | Helps create parallel work; this repo helps classify what agents leave behind |
 
-## When To Use This Instead Of Other Tools
+No code is copied from related projects. They are useful reference points for the ecosystem.
 
-Use this repository when you want a small, copyable skill/checkpoint.
+## GitHub Social Preview
 
-Use a fuller tool when you need active monitoring, a UI, or orchestration:
+This repo includes `assets/social-preview.png`.
 
-- FlowCheck is closer to an MCP safety layer for ongoing git hygiene monitoring.
-- Vibe Kanban and similar tools are closer to full AI-agent workspace managers.
-- Parallel worktree tools help run multiple agents; this skill helps review what they left behind.
-
-No code is copied from those projects. They are useful reference points for the ecosystem.
+GitHub currently requires social preview images to be uploaded through the repository
+Settings UI. Use the image in this repo as the upload asset.
 
 ## Discoverability Keywords
 
