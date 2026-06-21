@@ -68,6 +68,10 @@ Decision: review and split if core/store mixes unrelated runtime changes
 Lane: generated-runtime
 Paths: dist/, coverage/
 Decision: clean or record as local residue before handoff
+
+Lane: local-runtime
+Paths: node_modules/
+Decision: keep ignored locally, but record before phase handoff
 ```
 
 Result:
@@ -142,23 +146,28 @@ Before continuing, run an AI Worktree Hygiene checkpoint.
 
 Check:
 - git status --short
+- git status --ignored --short
 - git diff --stat
 - untracked files
 - ignored generated outputs
-- large repo-local runtime directories such as .starter-os/, .venv/, db/, data/, or reports/
+- large repo-local runtime directories such as .starter-os/, .local/, .venv/, node_modules/, db/, data/, reports/, or dist/
 - whether a workflow graph exists but contracts or repair artifacts are missing
 - whether a dogfood or case adapter reads case artifacts while case sentinel terms stay out of product source
+- whether case sentinel checks include camelCase/key variants, not only visible labels
+- scratch path outputs outside the repo, including input source, private-data status, and cleanup decision
 - research caches
 - package-manager drift
 - mixed product/test/docs/dependency changes
 
 Classify every path into one lane:
 product-code, tests, spec-plan, research-summary, research-cache,
-generated-runtime, dependency, accidental-tooling, or unknown.
+generated-runtime, local-runtime, scratch-outside-repo, dependency,
+accidental-tooling, or unknown.
 
 For each lane, say keep, discard, commit, review, or split.
-Do not claim the branch is ready unless the dirty state can be explained by lane,
-phase, evidence, and next action.
+Remember: tracked clean is not phase clean. Do not claim the branch is ready unless
+tracked, untracked, ignored, and outside-repo scratch state can be explained by
+lane, phase, evidence, and next action.
 ```
 
 ## What It Includes
@@ -177,13 +186,16 @@ phase, evidence, and next action.
 Run the full hygiene checkpoint immediately when:
 
 - `git status --short` is non-empty
+- `git status --short` is empty but `git status --ignored --short` shows ignored residue before a phase switch, handoff, commit, merge, push, or claim; tracked clean is not phase clean
 - ignored generated outputs such as `dist/`, `coverage/`, `build/`, or `.starter-os/` exist after verification commands
-- large repo-local runtime directories such as `.starter-os/`, `.venv/`, `db/`, `data/`, or `reports/` are untracked, ignored, or unexplained
+- large repo-local runtime directories such as `.starter-os/`, `.local/`, `.venv/`, `node_modules/`, `db/`, `data/`, `reports/`, or `dist/` are untracked, ignored, or unexplained
 - a workflow graph exists but contracts or repair artifacts are missing, creating a graph-ready but not claim-ready state
 - a dogfood or case adapter reads case artifacts while case sentinel terms appear in product source, default UI copy, core schemas, or generic docs; this is a case sentinel boundary failure
+- a dogfood or case adapter only checks visible labels while camelCase/key variants, report filenames, or legacy case identifiers can still leak into product code
 - `.research/`, cloned external repositories, downloaded datasets, or raw research caches appear in the repo tree
 - package-manager files appear without an approved migration
-- a scan, dashboard, export, or verification command ran without an output lane and cleanup/keep decision
+- a scan, dashboard, export, verification, build, or dry-run command ran without an output lane and cleanup/keep decision
+- a dry-run writes to a `/tmp` or outside-repo scratch path without recording the scratch path, input source, private-data status, and destroy/keep decision
 - a phase, lane, or subagent batch has finished and has not been classified
 - a shared file mixes multiple product layers or version phases
 - you are preparing to commit, merge, push, publish, hand off, or start a new version
@@ -200,6 +212,8 @@ Classify every changed path into exactly one lane:
 | `research-summary` | Distilled research notes safe to commit |
 | `research-cache` | Raw cloned repositories, papers, downloaded artifacts |
 | `generated-runtime` | Build output, dashboards, coverage, compiled assets |
+| `local-runtime` | Ignored local tool runtimes or installed dependencies such as `.local/`, `.venv/`, or `node_modules/` |
+| `scratch-outside-repo` | Temporary outputs outside the repo, such as `/tmp` dry-runs, that still need path and cleanup records |
 | `dependency` | Package files, lockfiles, toolchain configuration |
 | `accidental-tooling` | Editor files, local caches, accidental workspace artifacts |
 | `unknown` | Anything that cannot be explained yet |

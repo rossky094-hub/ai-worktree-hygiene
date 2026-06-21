@@ -57,11 +57,16 @@ require_grep '## Trigger Decision' skills/ai-worktree-hygiene/SKILL.md
 require_grep '### Hard Triggers' skills/ai-worktree-hygiene/SKILL.md
 require_grep '### Soft Triggers' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'git status --short is non-empty' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'tracked clean is not phase clean' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'ignored generated outputs such as dist/' skills/ai-worktree-hygiene/SKILL.md
-require_grep 'large repo-local generated or runtime directories such as' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'git status --ignored --short' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'large repo-local generated, dependency, or runtime directories such as' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'workflow graph or dashboard runtime exists but contract' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'case sentinel terms appear in product source' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'camelCase case sentinel keys' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'case adapter may read case artifacts' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'scratch-outside-repo' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'local-runtime' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'scan, dashboard, export, or verification command' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'Do not continue with product work until the hygiene checkpoint is written' skills/ai-worktree-hygiene/SKILL.md
 
@@ -77,9 +82,12 @@ require_grep 'Quick Start' README.md
 require_grep '30-Second Before / After' README.md
 require_grep 'One-Click Prompt' README.md
 require_grep 'Comparison' README.md
+require_grep 'git status --ignored --short' README.md
+require_grep 'tracked clean is not phase clean' README.md
 require_grep 'workflow graph exists but contracts or repair artifacts are missing' README.md
 require_grep 'dogfood or case adapter reads case artifacts' README.md
 require_grep 'case sentinel boundary' README.md
+require_grep 'scratch path' README.md
 require_grep 'MIT' README.md
 require_grep 'Show HN' docs/launch-posts.md
 require_grep 'assets/social-preview.png' docs/social-preview.md
@@ -90,9 +98,12 @@ require_grep '^commit-hygiene$' repository-topics.txt
 
 require_grep 'Generated/runtime readiness trap' templates/hygiene-checkpoint.md
 require_grep 'Case sentinel boundary' templates/hygiene-checkpoint.md
+require_grep 'Ignored local-runtime residue' templates/hygiene-checkpoint.md
+require_grep 'Scratch outside repo outputs' templates/hygiene-checkpoint.md
 
 for file in README.md skills/ai-worktree-hygiene/SKILL.md templates/*.md examples/*.md docs/*.md; do
   reject_grep "$(printf '%s|%s|%s|%s|%s' "Eche""lon" "Continuous ""Project OS" "/Users/""r" "New ""project" "V""3\\.[0-9]")" "$file"
+  reject_grep "$(printf '%s|%s' "claim""Card""Proof""Ledger" "evidence""Scoped""Beta""Top10")" "$file"
 done
 
 python3 - <<'PY'
