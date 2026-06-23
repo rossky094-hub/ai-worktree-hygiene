@@ -8,8 +8,8 @@ agent platform.
 Short pitch:
 
 ```text
-Checkpoint skill for AI coding agents: classify dirty worktrees, ignored residue,
-generated artifacts, subagent diffs, and existing-chain gaps.
+Phase-clean checkpoint for AI coding agents: stop branch drift, reduce token waste,
+and keep worktrees, subagent diffs, and versioned slices reviewable.
 ```
 
 ## Search Intent
@@ -19,12 +19,16 @@ The project targets people searching for:
 - AI coding worktree hygiene
 - dirty worktree AI agent
 - tracked clean is not phase clean
+- stronger agents drift faster without phase boundaries
+- reduce token waste in AI coding
+- versioned slice hygiene
 - ignored residue in AI coding branches
 - git hygiene for Claude Code or Codex
 - vibe coding repository cleanup
 - agent workflow commit hygiene
 - subagent diff review
 - existing chain audit
+- existing-chain gaps
 - generated artifacts in AI coding branches
 - research cache cleanup
 
@@ -33,7 +37,7 @@ The project targets people searching for:
 Set the repository description to:
 
 ```text
-Checkpoint skill for AI coding agents: classify dirty worktrees, ignored residue, generated artifacts, subagent diffs, and existing-chain gaps.
+Phase-clean checkpoint for AI coding agents: stop branch drift, reduce token waste, and keep worktrees, subagent diffs, and versioned slices reviewable.
 ```
 
 Set the homepage to the README or leave it empty until there is a demo page.
@@ -45,6 +49,7 @@ Set topics from `repository-topics.txt`.
 Do:
 
 - Keep the README first screen problem-focused.
+- Say "reduce token waste" as a process benefit, not as an unmeasured percentage claim.
 - Include a copyable quick start in the first page.
 - Keep examples realistic and short.
 - Open starter issues labeled `good first issue`.
@@ -72,6 +77,6 @@ Open these after the first push:
 ## Maintenance Cadence
 
 - Keep releases small.
-- Add one new dirty worktree, phase-clean, or delegation pattern per release.
+- Add one new dirty worktree, phase-clean, delegation, or version-chain pattern per release.
 - Add a verification rule whenever a new failure mode is discovered.
 - Treat every user report as an input-output contract: actual messy state, expected hygiene guidance, gap, repair path.

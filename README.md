@@ -5,6 +5,8 @@ Your AI agent says "tests pass".
 But the phase is not clean: tracked changes, ignored runtime residue, scratch
 outputs, subagent diffs, and existing-chain gaps are all mixed into one handoff.
 
+Stronger agents drift faster without phase boundaries. Spend tokens on repair, not on carrying a confused branch forward.
+
 AI Worktree Hygiene gives Codex, Claude Code, Cursor, and other coding agents a
 phase-clean checkpoint before the repo becomes unreviewable. It classifies dirty
 worktrees, ignored residue, generated artifacts, delegated changes, and
@@ -159,6 +161,10 @@ Check:
 - large repo-local runtime directories such as .starter-os/, .local/, .venv/, node_modules/, db/, data/, reports/, or dist/
 - whether a workflow graph exists but contracts or repair artifacts are missing
 - whether a repo with prior versioned specs, dogfood runs, case studies, or generated project artifacts needs an Existing Chain Audit before a new slice
+- whether a versioned repo has an active version marker, branch/worktree owner, lane, evidence state, and closure or continuation decision
+- whether a missing artifact field is being mistaken for missing source implementation
+- whether provider, memory, code graph, adapter, vendor, or competitor research was checked before calling research absent
+- whether new authored artifacts are linked to a parent goal, lane/module, upstream evidence, downstream consumer, claim boundary, and next decision
 - whether a dogfood or case adapter reads case artifacts while case sentinel terms stay out of product source
 - whether case sentinel checks include camelCase/key variants, not only visible labels
 - whether returned subagent work passed diff whitelist review against the requested lane and file set
@@ -179,6 +185,7 @@ tracked, untracked, ignored, and outside-repo scratch state can be explained by
 lane, phase, evidence, and next action.
 
 For multi-version or dogfood-heavy repos: No Existing Chain Audit table, no implementation.
+For versioned work: no version owner and closure decision, no next slice.
 For delegated work: No diff whitelist review, no acceptance.
 ```
 
@@ -203,6 +210,10 @@ Run the full hygiene checkpoint immediately when:
 - large repo-local runtime directories such as `.starter-os/`, `.local/`, `.venv/`, `node_modules/`, `db/`, `data/`, `reports/`, or `dist/` are untracked, ignored, or unexplained
 - a workflow graph exists but contracts or repair artifacts are missing, creating a graph-ready but not claim-ready state
 - a repo already has versioned specs, dogfood runs, case studies, or generated project artifacts, and a new spec, adapter, fixture, dashboard slice, compatibility harness, projection, or repair graph is proposed without an Existing Chain Audit
+- a versioned spec, plan, runbook, checkpoint, branch, or worktree lacks a version owner, lane, evidence state, or closure/continuation decision
+- a stale dashboard or generated artifact is treated as proof that source implementation is missing
+- provider, memory, code graph, adapter, vendor, or competitor research is called absent before prior notes, source/tests, manifests, provenance, and outside caches are checked
+- an authored artifact affects direction, claim boundaries, dashboard behavior, or repair decisions but is not linked into the active project chain
 - a dogfood or case adapter reads case artifacts while case sentinel terms appear in product source, default UI copy, core schemas, or generic docs; this is a case sentinel boundary failure
 - a dogfood or case adapter only checks visible labels while camelCase/key variants, report filenames, or legacy case identifiers can still leak into product code
 - `.research/`, cloned external repositories, downloaded datasets, or raw research caches appear in the repo tree

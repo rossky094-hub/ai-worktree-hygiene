@@ -47,6 +47,7 @@ require_file docs/install-claude-code.md
 require_file docs/install-cursor.md
 require_file docs/releases/v0.1.0.md
 require_file docs/releases/v0.2.0.md
+require_file docs/releases/v0.3.0.md
 require_file examples/30-second-demo.md
 require_file assets/social-preview.png
 require_file scripts/make-social-preview.py
@@ -69,6 +70,10 @@ require_grep 'case adapter may read case artifacts' skills/ai-worktree-hygiene/S
 require_grep 'scratch-outside-repo' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'local-runtime' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'Existing Chain Audit' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'Version-chain rule' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'Implemented-vs-materialized rule' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'Research-gate rule' skills/ai-worktree-hygiene/SKILL.md
+require_grep 'Authored-artifact continuity rule' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'No table, no implementation' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'diff whitelist review' skills/ai-worktree-hygiene/SKILL.md
 require_grep 'while-here enhancement' skills/ai-worktree-hygiene/SKILL.md
@@ -77,6 +82,8 @@ require_grep 'Do not continue with product work until the hygiene checkpoint is 
 
 require_grep 'AI coding' README.md
 require_grep 'phase-clean checkpoint' README.md
+require_grep 'Stronger agents drift faster without phase boundaries' README.md
+require_grep 'Spend tokens on repair, not on carrying a confused branch forward' README.md
 require_grep 'git hygiene' README.md
 require_grep 'worktree hygiene' README.md
 require_grep 'dirty worktree' README.md
@@ -102,8 +109,11 @@ require_grep 'Show HN' docs/launch-posts.md
 require_grep 'assets/social-preview.png' docs/social-preview.md
 require_grep 'First Public Checkpoint Skill' docs/releases/v0.1.0.md
 require_grep 'Phase-Clean and Delegation Gates' docs/releases/v0.2.0.md
-require_grep 'subagent diffs, and existing-chain gaps' docs/github-discoverability.md
-require_grep 'subagent diffs, and existing-chain gaps' docs/launch-playbook.md
+require_grep 'Version Chains and Token Waste' docs/releases/v0.3.0.md
+require_grep 'existing-chain gaps' docs/github-discoverability.md
+require_grep 'existing-chain gaps' docs/launch-playbook.md
+require_grep 'stop branch drift, reduce token waste' docs/github-discoverability.md
+require_grep 'stop branch drift, reduce token waste' docs/launch-playbook.md
 require_grep '^worktree-hygiene$' repository-topics.txt
 require_grep '^dirty-worktree$' repository-topics.txt
 require_grep '^commit-hygiene$' repository-topics.txt
@@ -113,10 +123,14 @@ require_grep 'Case sentinel boundary' templates/hygiene-checkpoint.md
 require_grep 'Ignored local-runtime residue' templates/hygiene-checkpoint.md
 require_grep 'Scratch outside repo outputs' templates/hygiene-checkpoint.md
 require_grep 'Existing chain audit' templates/hygiene-checkpoint.md
+require_grep 'Version-chain status' templates/hygiene-checkpoint.md
+require_grep 'Implemented vs materialized' templates/hygiene-checkpoint.md
+require_grep 'Research gate' templates/hygiene-checkpoint.md
+require_grep 'Authored artifact continuity' templates/hygiene-checkpoint.md
 require_grep 'Subagent diff whitelist review' templates/hygiene-checkpoint.md
 
-for file in README.md skills/ai-worktree-hygiene/SKILL.md templates/*.md examples/*.md docs/*.md; do
-  reject_grep "$(printf '%s|%s|%s|%s|%s|%s' "Eche""lon" "Continuous ""Project OS" "Project ""OS" "/Users/""r" "New ""project" "V""3\\.[0-9]")" "$file"
+for file in README.md skills/ai-worktree-hygiene/SKILL.md templates/*.md examples/*.md docs/*.md docs/releases/*.md; do
+  reject_grep "$(printf '%s|%s|%s|%s|%s|%s' "Eche""lon" "Continuous ""Project OS" "Project ""OS" "/Users/""r" "New ""project" "V""3\\.[0-9A-Z]")" "$file"
   reject_grep "$(printf '%s|%s' "claim""Card""Proof""Ledger" "evidence""Scoped""Beta""Top10")" "$file"
 done
 

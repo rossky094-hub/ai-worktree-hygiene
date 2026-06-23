@@ -22,6 +22,28 @@
   - Completed:
   - Existing chain extended / bypassed:
   - Bypass justification:
+- Version-chain status:
+  - Versioned repo or numbered slices:
+  - Active version marker:
+  - Branch/worktree owner:
+  - Closure or continuation decision:
+- Implemented vs materialized:
+  - Implemented in source:
+  - Covered by tests:
+  - Documented by case study or evidence:
+  - Present in current artifact:
+  - Claim-sufficient:
+- Research gate:
+  - Prior research summaries checked:
+  - Source/tests/manifests checked:
+  - Adapter provenance or outside cache checked:
+  - Missing research vs stale artifact conclusion:
+- Authored artifact continuity:
+  - New authored artifacts affecting direction/claims:
+  - Parent goal and lane/module:
+  - Upstream evidence and downstream consumer:
+  - Can/cannot-claim boundary:
+  - Next decision:
 - Subagent diff whitelist review:
   - Subagent or worker returned changes:
   - Expected lane and file set:
@@ -73,6 +95,10 @@
 - Which stop gate should have fired earlier?
 - Did tracked clean get mistaken for phase clean?
 - Did a new product slice bypass existing specs, dogfood runs, case studies, or generated project artifacts without an Existing Chain Audit?
+- Did a versioned slice lack a version marker, branch/worktree owner, lane, evidence state, or closure decision?
+- Did a stale generated artifact get mistaken for missing source implementation?
+- Did research get called absent before prior notes, source/tests, manifests, provenance, or outside caches were checked?
+- Did an authored artifact get treated as done without a parent goal, lane/module, upstream evidence, downstream consumer, claim boundary, and next decision?
 - Did subagent work get accepted before diff whitelist review?
 - Did a while-here enhancement or cross-lane cleanup sneak into the current slice?
 - Which lane mixed with another lane?

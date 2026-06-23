@@ -20,6 +20,9 @@ The failure mode it targets is common in AI-assisted coding: tests pass, but the
 branch contains research clones, ignored residue, generated files, lockfile drift,
 subagent diffs, existing-chain gaps, and mixed commits.
 
+Stronger agents do not remove the need for boundaries; they make drift faster.
+The skill helps spend tokens on repair, not on carrying a confused branch forward.
+
 The skill asks the agent to classify the dirty worktree into lanes:
 product-code, tests, spec-plan, research-summary, research-cache, generated-runtime,
 local-runtime, scratch-outside-repo, dependency, accidental-tooling, or unknown.
@@ -43,6 +46,9 @@ Body:
 I keep seeing the same failure mode with agentic coding: the agent says "tests pass",
 but the branch has generated artifacts, ignored residue, research clones, subagent
 diffs, dependency drift, and mixed product/test/docs commits.
+
+The stronger the agent, the faster it can build on the wrong branch state. This is
+a small checkpoint to reduce token waste before that drift compounds.
 
 I packaged a tiny checkpoint skill that asks the agent to classify dirty state into
 lanes and explain the next safe action before commit or handoff.
@@ -74,7 +80,10 @@ But the branch has:
 - mixed commits
 
 I made a tiny checkpoint skill for Codex / Claude Code / Cursor to stop dirty
-AI coding branches from becoming unreviewable:
+AI coding branches from becoming unreviewable.
+
+Stronger agents drift faster without phase boundaries. Spend tokens on repair,
+not on carrying a confused branch forward:
 
 https://github.com/rossky094-hub/ai-worktree-hygiene
 ```
@@ -92,6 +101,10 @@ The branch contains generated artifacts, research clones, dependency drift, and 
 commits. It may also contain ignored runtime residue, scratch outputs, or subagent
 diffs that nobody has reviewed. The agent is technically "done", but the human
 handoff is poor.
+
+As agents get stronger, this gets more important rather than less: a stronger agent
+can build a more complex drifted branch faster. The goal is to spend fewer tokens
+carrying confusion forward and more tokens on the actual repair.
 
 I packaged a small open-source checkpoint skill for this: AI Worktree Hygiene.
 It asks Codex / Claude Code / Cursor to classify dirty state into lanes, explain what

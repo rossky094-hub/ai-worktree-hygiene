@@ -20,6 +20,30 @@ Existing-chain rule:
 In a project with prior versioned specs, dogfood runs, case studies, or generated project artifacts, do not add a new spec, adapter, fixture, dashboard slice, compatibility harness, projection, or repair graph until an Existing Chain Audit proves the capability is missing or justifies why the new path must bypass the existing chain.
 ```
 
+Version-chain rule:
+
+```text
+In a repo that uses numbered specs or versioned slices, do not create the next spec, plan, adapter, fixture, dashboard slice, or implementation branch until the current slice has an explicit version marker, branch/worktree owner, lane, evidence state, and closure or continuation decision.
+```
+
+Implemented-vs-materialized rule:
+
+```text
+Before saying a capability must be newly developed or replaced, separate what is implemented in source, covered by tests, documented by case study, present in the current artifact, and strong enough to claim the target outcome. A stale dashboard or runtime artifact is not the same problem as missing implementation.
+```
+
+Research-gate rule:
+
+```text
+Do not label provider, memory, code graph, adapter, vendor, or competitor research as "not done" until research notes, versioned specs, source manifests, focused tests, adapter provenance, and outside-repo research caches have been checked. A missing final shortlist, stale provenance, broken archive, or non-executable adapter is not the same as absent source-level research.
+```
+
+Authored-artifact continuity rule:
+
+```text
+An authored file is not complete just because it exists. If it affects project direction, claim boundaries, specs, plans, provider boundaries, dashboard behavior, case evidence, current rail state, or the next repair decision, it must be linked into the active project chain: parent goal, lane/module, upstream evidence, downstream consumer, can/cannot-claim boundary, and next decision. Ordinary source files do not need boilerplate headers if they are classifiable by path, module ownership, tests, imports, graph evidence, or surrounding spec/plan context.
+```
+
 ## Trigger Decision
 
 Treat this skill as a gate, not a reminder. If a hard trigger matches, stop product work and write the hygiene checkpoint first.
@@ -40,6 +64,13 @@ Run the full process immediately when any of these is true:
 - a dogfood/case adapter or pilot-report reader is added and case sentinel terms appear in product source, default UI copy, core schemas, or generic docs outside case-study artifacts, fixtures, or boundary tests.
 - camelCase case sentinel keys, snake_case fields, report filenames, or legacy case report identifiers leak from case artifacts into product source, default UI copy, core schemas, or generic docs.
 - A repo already has versioned dogfood/case-study artifacts or generated project outputs, and the next action proposes a new spec, adapter, fixture, dashboard slice, compatibility harness, projection, or repair graph without an Existing Chain Audit.
+- A versioned spec, plan, runbook, or checkpoint is created without the version marker in filename, title, or metadata.
+- The next proposed slice has no branch/worktree name that identifies the active version and lane.
+- A "thin spec" or small docs slice is proposed as an exception to version, branch/worktree, lane, or Existing Chain Audit rules.
+- The next action treats a missing current artifact field, stale dashboard state, or weak report shape as proof that the source capability does not exist.
+- A PRD, spec, decision note, or cannot-claim list says source-level provider, memory, code graph, adapter, vendor, or competitor research is incomplete without checking prior research summaries, hardened provider boundaries, source/tests, adapter manifests, and outside-repo research caches.
+- A new authored artifact affects direction, claim boundaries, specs, plans, provider boundaries, dashboard behavior, case evidence, current rail state, or next repair but is not recoverably linked from the current rail, a spec/plan, an ADR, a generated artifact, or an obvious module/test context.
+- A patch, hardening slice, ADR, or research artifact is promoted to a new major product version label without introducing a new product capability, semantic object, dashboard surface, provider boundary, ledger transition, or end-to-end workflow.
 - `.research/`, cloned external repositories, downloaded datasets, or other raw research caches appear in the repo tree.
 - `pnpm-lock.yaml`, `yarn.lock`, `pnpm-workspace.yaml`, or another package-manager artifact appears without an approved package-manager migration.
 - A scan, dashboard, export, or verification command has run without a declared output lane and cleanup/keep decision.
@@ -55,6 +86,11 @@ Run the full process immediately when any of these is true:
 Run at least the lightweight status and ignored-output checks when any of these is true. Escalate to the full process if anything is dirty or unexplained:
 
 - Moving from research to spec, spec to plan, plan to implementation, implementation to review, or one lane to another.
+- Naming or renaming a major spec, plan, runbook, checkpoint, branch, or worktree in a versioned repo.
+- Before describing a capability as "not implemented", "needs to be built", "should be replaced", or "should be delegated to an external provider".
+- Before writing a research gate, cannot-claim boundary, PRD competitor section, or provider reuse boundary for code graph, memory, adapters, or vendor choices.
+- Before committing or handing off a new authored artifact that affects direction, claimability, current rail state, dashboard behavior, or next repair.
+- Before naming a slice as a new major version, minor version, ADR, or research summary.
 - Before proposing or implementing the next product slice in a repo with prior versioned specs, dogfood runs, case studies, or generated project artifacts.
 - Before promoting dogfood/case report handling into generic core, dashboard, adapters, or docs.
 - Before running any scan, dashboard, export, or verification command that may materialize project-local artifacts.
@@ -92,8 +128,12 @@ Run at least the lightweight status and ignored-output checks when any of these 
    | Does this capability already exist in the repo? | File paths, line references, commands, artifacts, or "not found after search terms: ..." |
    | Where is the evidence? | Specific specs, source modules, tests, case studies, dashboard artifacts, ledgers, generated outputs, or absence evidence |
    | What is implemented, partially implemented, and already failed? | Separate implementation evidence from dogfood/failure evidence |
+   | Is prior external research already summarized or hardened? | Check research notes, specs, source manifests, focused tests, adapter provenance, and outside-repo research caches before calling research absent |
+   | Is it implemented, tested, case-documented, materialized in the current artifact, and claim-sufficient? | Fill each column separately; do not collapse them into one yes/no |
+   | What version owns the current slice? | Spec/plan filenames, titles, metadata, branch/worktree name, or "missing and must be repaired before continuing" |
    | Does the current proposal extend the existing chain or bypass it? | Name the chain being extended or the bypass being introduced |
    | If it bypasses the chain, why is bypass required? | Concrete blocker, not convenience, speed, or a local smoke-test desire |
+   | If a new authored artifact exists, how is it embedded? | Parent goal, lane/module, upstream evidence, downstream consumer, can/cannot-claim boundary, next decision, and rail/spec/ADR/graph/module link |
 
    No table, no implementation. "I remember from context" is not evidence. A runtime artifact existing is not proof that the product claim, contract, mismatch attribution, repair path, or ledger transition is complete.
 
@@ -117,6 +157,13 @@ Run at least the lightweight status and ignored-output checks when any of these 
    - Large generated/runtime directories are present and lack a keep/discard/ignore decision.
    - A generated workflow graph or dashboard runtime is present, but contract, verification, mismatch, repair, or ledger artifacts needed for the product claim are missing.
    - A new spec, adapter, fixture, dashboard slice, compatibility harness, projection, or repair graph is proposed in a repo with prior dogfood/case-study evidence, but no Existing Chain Audit ties it to existing capability, partial implementation, or documented failure.
+   - A new spec, plan, runbook, checkpoint, branch, or worktree lacks a clear version owner in a versioned repo.
+   - A previous versioned spec is unnamed, unclosed, or ambiguous, but the next version is being proposed anyway.
+   - A companion spec and plan disagree about their version owner.
+   - A missing field in a current generated artifact is being treated as missing source implementation without checking source, tests, case-study, and artifact freshness separately.
+   - A missing final provider shortlist, stale upstream refresh, broken source archive, or non-executable adapter is being treated as proof that source-level external research was never done.
+   - A new authored artifact changes project context but remains only a loose file, untracked note, or chat-explained document.
+   - A small patch, hardening fix, research summary, or ADR is consuming a new major product version label instead of staying in a patch, ADR, or research lane.
    - Case sentinel terms or key variants appear in product source, default UI copy, core schemas, or generic docs instead of staying in case-study artifacts, fixtures, generated/extracted evidence, or boundary tests.
    - Outside-repo scratch outputs exist without a recorded scratch path, input source, private-data status, and cleanup decision.
    - A new phase has started while the previous phase lacks a closure record.
@@ -170,7 +217,11 @@ Run at least the lightweight status and ignored-output checks when any of these 
    - Can each lane name its verification evidence?
    - Can each lane say keep, discard, commit, or review?
    - Can the next action be done without touching unrelated lanes?
+   - If this is a versioned repo, can you name the active version, matching branch/worktree, owner lane, and closure or continuation decision?
    - If proposing a new product slice, does the Existing Chain Audit prove whether it extends an existing chain, repairs a documented failure, or intentionally bypasses a blocked chain?
+   - If a new authored artifact was created, can another agent explain its parent goal, lane/module, upstream evidence, downstream consumer, claim boundary, and next decision without chat history?
+   - If this is called a new major version, does it truly introduce a new product contract rather than a patch, ADR, or research summary?
+   - If a capability appears absent, can you separate implementation state, test coverage, case-study evidence, current artifact materialization, and claim sufficiency?
    - If subagent work returned, can you show the diff whitelist review and explain every changed path?
    - If a while-here enhancement appeared, was it rejected from this slice or isolated into a separate approved slice?
    - If generated runtime artifacts exist, can you say which product-chain artifacts are still missing?
@@ -186,6 +237,7 @@ Run at least the lightweight status and ignored-output checks when any of these 
    - ignored local-runtime residue status,
    - outside-repo scratch output status,
    - existing chain audit status for repos with prior versioned specs, dogfood runs, case studies, or generated project artifacts,
+   - version-chain status for repos with numbered specs or versioned slices,
    - subagent diff whitelist review status,
    - graph/runtime readiness versus contract/repair/ledger readiness,
    - case sentinel boundary status,
@@ -234,6 +286,13 @@ When the worktree gets hard to read, look for these causes and record which ones
 17. Existing specs, dogfood runs, case studies, or generated project artifacts were not inventoried before adding a parallel spec, adapter, fixture, dashboard slice, compatibility harness, projection, or repair graph.
 18. Subagent output was trusted before diff whitelist review, allowing cross-lane changes into the current slice.
 19. A while-here enhancement was accepted because it looked useful, not because it belonged to the approved lane and work order.
+20. A spec or plan was treated as "small" and therefore skipped version, branch/worktree, lane, and closure gates.
+21. A version label lived only in chat memory, not in filenames, titles, metadata, branch/worktree names, or checkpoint records.
+22. A stale or incomplete generated artifact was mistaken for absent source implementation.
+23. External research context displaced the local source/test/case-study evidence chain.
+24. A provider shortlist, provenance-refresh, archive-integrity, or executable-adapter gap was misclassified as "source-level research not done."
+25. An authored artifact was treated as done when written, but not linked into the current rail, spec/plan, ADR, graph, or module/test context.
+26. A patch, hardening slice, ADR, or research artifact consumed a new major product version label and obscured the real product layer being changed.
 
 For each cause, write one prevention action into the checkpoint report.
 
